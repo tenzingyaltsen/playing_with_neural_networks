@@ -28,7 +28,8 @@ I <- sample.int(nrow(train_images))
 train_images <- train_images[I,]
 train_labels <- train_labels[I,]
 
-# Use sequential approach to define simple (base) neural network.
+#### Create simple (base) neural network. ####
+# Define the network.
 network0 <- keras_model_sequential() %>%
   layer_dense(units = 512, activation = "relu", 
               input_shape = (28 * 28)) %>%
@@ -40,3 +41,26 @@ network0 %>% compile(optimizer = "rmsprop",
                      loss = "categorical_crossentropy", 
                      metrics = c("accuracy", "mse"))
 
+# Train the base neural network and save into history object.
+hist0 <- network0 %>% fit(train_images, train_labels, epochs = 5,
+                          batch_size = 128)
+plot(hist0)
+
+# Assess the base network using the test data.
+results0 <- network0 %>% evaluate(test_images, test_labels)
+results0
+
+#### Create network with different epoch number. ####
+# Define, compile and assess the network.
+network1 <- keras_model_sequential() %>%
+  layer_dense(units = 512, activation = "relu", 
+              input_shape = (28 * 28)) %>%
+  layer_dense(units = 10, activation = "softmax")
+network1
+network1 %>% compile(optimizer = "rmsprop", 
+                     loss = "categorical_crossentropy", 
+                     metrics = c("accuracy", "mse"))
+hist1 <- network1 %>% fit(train_images, train_labels, epochs = 15,
+                          batch_size = 128)
+results1 <- network1 %>% evaluate(test_images, test_labels)
+results1
