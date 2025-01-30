@@ -64,3 +64,17 @@ hist1 <- network1 %>% fit(train_images, train_labels, epochs = 15,
                           batch_size = 128)
 results1 <- network1 %>% evaluate(test_images, test_labels)
 results1
+
+#### Create network with larger batch size. ####
+network2 <- keras_model_sequential() %>%
+  layer_dense(units = 512, activation = "relu", 
+              input_shape = (28 * 28)) %>%
+  layer_dense(units = 10, activation = "softmax")
+network2
+network2 %>% compile(optimizer = "rmsprop", 
+                     loss = "categorical_crossentropy", 
+                     metrics = c("accuracy", "mse"))
+hist2 <- network2 %>% fit(train_images, train_labels, epochs = 5,
+                          batch_size = 384)
+results2 <- network2 %>% evaluate(test_images, test_labels)
+results2
